@@ -48,6 +48,10 @@ namespace TestJobForSAUT
                 Layer = PropertyLayer.Second;
 
                 CheckProps(GetTypeProps(p.PropertyType));
+
+                Layer = PropertyLayer.First;
+
+                return true;
             }
 
             Layer = PropertyLayer.First;
