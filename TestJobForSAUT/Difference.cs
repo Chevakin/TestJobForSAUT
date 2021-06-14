@@ -12,14 +12,17 @@ namespace TestJobForSAUT
 
         public Difference(string path, string first, string second)
         {
-            Path = path ?? throw new ArgumentNullException(nameof(path));
+            if (string.IsNullOrEmpty(path))
+                throw new ArgumentNullException(nameof(path));
+
+            Path = path;
             First = first;
             Second = second;
         }
 
         public void AddPrefixToPath(string prefix)
         {
-            if (prefix == null)
+            if (string.IsNullOrEmpty(prefix))
                 throw new ArgumentNullException(nameof(prefix));
 
             Path = $"{prefix}.{Path}";
