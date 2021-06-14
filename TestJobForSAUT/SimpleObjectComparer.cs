@@ -20,43 +20,38 @@ namespace TestJobForSAUT
 
         private Type Type { get; set; }
 
-        private PropertyLayer Layer { get; set; } = PropertyLayer.First;
-
         public IEnumerable<Difference> Compare<T>(T First, T Second)
         {
             Type = typeof(T);
 
             props = GetTypeProps(Type);
-            CheckProps(props);
+
+            if (CheckProps(props) == false)
+                throw new Exception($"Тип {Type.FullName} некорректен, т.к. содержит минимум одно свойство некорректного типа");
+
+
         }
 
-        private void CheckProps(IEnumerable<PropertyInfo> properties)
+        private bool CheckProps(IEnumerable<PropertyInfo> properties)
         {
-            if (properties.All(p => CheckProp(p)) == false)
-            {
-                throw new Exception($"Тип {Type.FullName} некорректен, т.к. содержит минимум одно свойство некорректного типа");
-            }
+            return properties.All(p => CheckProp(p));
         }
 
         private bool CheckProp(PropertyInfo p)
         {
             if (correctTypes.Contains(p.PropertyType))
-                return true;
-
-            if (Layer == PropertyLayer.First)
             {
-                Layer = PropertyLayer.Second;
-
-                CheckProps(GetTypeProps(p.PropertyType));
-
-                Layer = PropertyLayer.First;
-
                 return true;
             }
 
-            Layer = PropertyLayer.First;
+            var properties = GetTypeProps(p.PropertyType);
 
-            return false;
+            if (properties == null || properties.Count == 0)
+            {
+                return false;
+            }
+
+            return CheckProps(properties);
         }
 
         private HashSet<PropertyInfo> GetTypeProps(Type propertyType)
@@ -64,12 +59,6 @@ namespace TestJobForSAUT
             return Type.GetProperties(BindingFlags.Instance | BindingFlags.Public)
                             .Where(p => p.CanRead)
                             .ToHashSet();
-        }
-
-        private enum PropertyLayer
-        {
-            First,
-            Second,
         }
     }
 }
