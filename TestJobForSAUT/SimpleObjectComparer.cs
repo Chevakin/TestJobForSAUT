@@ -16,11 +16,8 @@ namespace TestJobForSAUT
 
         public IEnumerable<Difference> Compare<T>(T first, T second)
         {
-            return Compare(first, second, typeof(T));
-        }
+            var type = typeof(T);
 
-        private IEnumerable<Difference> Compare(object first, object second, Type type)
-        {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
             else if (second == null)
@@ -73,7 +70,7 @@ namespace TestJobForSAUT
                 }
             }
 
-            var differences = Compare(firstPropValue, secondPropValue, type).ToArray();
+            var differences = GetDifference(firstPropValue, secondPropValue, GetTypeProps(type)).ToArray();
 
             foreach(var difference in differences)
             {
