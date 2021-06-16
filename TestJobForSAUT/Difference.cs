@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Text;
 
 namespace TestJobForSAUT
 {
     public class Difference
     {
-        public string Path { get; private set; }
+        private readonly StringBuilder path;
+
+        public string Path => path.ToString();
 
         public string First { get; private set; }
 
@@ -15,9 +18,9 @@ namespace TestJobForSAUT
             if (string.IsNullOrEmpty(path))
                 throw new ArgumentNullException(nameof(path));
 
-            Path = path;
-            First = first;
-            Second = second;
+            this.path = new StringBuilder(path);
+            this.First = first;
+            this.Second = second;
         }
 
         public void AddPrefixToPath(string prefix)
@@ -25,7 +28,7 @@ namespace TestJobForSAUT
             if (string.IsNullOrEmpty(prefix))
                 throw new ArgumentNullException(nameof(prefix));
 
-            Path = $"{prefix}.{Path}";
+            path.Insert(0, $"{prefix}.");
         }
     }
 }
