@@ -55,7 +55,7 @@ namespace TestJobForSAUT
                 }
             }
 
-            return new Difference[0];
+            return differences;
         }
 
         private IEnumerable<Difference> GetDifference(object firstPropValue, object secondPropValue, string propertyName)
