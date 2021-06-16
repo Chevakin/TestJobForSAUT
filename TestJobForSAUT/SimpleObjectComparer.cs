@@ -40,6 +40,8 @@ namespace TestJobForSAUT
             else if (second == null)
                 throw new ArgumentNullException(nameof(second));
 
+            IEnumerable<Difference> differences = new HashSet<Difference>();
+
             foreach (var prop in properties)
             {
                 var firstProp = prop.GetValue(first);
@@ -48,7 +50,9 @@ namespace TestJobForSAUT
                 var difference = GetDifference(firstProp, secondProp, prop.Name).ToArray();
 
                 if (difference != null)
-                    return difference;
+                {
+                    differences.Concat(difference);
+                }
             }
 
             return new Difference[0];
