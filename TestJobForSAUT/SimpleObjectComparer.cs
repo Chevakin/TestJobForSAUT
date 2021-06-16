@@ -7,7 +7,7 @@ namespace TestJobForSAUT
 {
     public class SimpleObjectComparer : IComparer
     {
-        private readonly HashSet<Type> correctTypes = new HashSet<Type>
+        private readonly HashSet<Type> simpleTypes = new HashSet<Type>
         {
             typeof(string),
             typeof(int),
@@ -22,8 +22,6 @@ namespace TestJobForSAUT
                 throw new ArgumentNullException(nameof(first));
             else if (second == null)
                 throw new ArgumentNullException(nameof(second));
-            else if (first.GetType() != type || second.GetType() != type)
-                throw new ArgumentException($"{nameof(first)} и {nameof(second)} должны принадлежать типу {type.FullName}");
 
             var props = GetTypeProps(type);
 
@@ -37,8 +35,10 @@ namespace TestJobForSAUT
         {
             if (first == null)
                 throw new ArgumentNullException(nameof(first));
-            else if (second == null)
+            if (second == null)
                 throw new ArgumentNullException(nameof(second));
+            if (properties == null)
+                throw new ArgumentNullException(nameof(properties));
 
             IEnumerable<Difference> differences = new HashSet<Difference>();
 
@@ -47,9 +47,27 @@ namespace TestJobForSAUT
                 var firstProp = prop.GetValue(first);
                 var secondProp = prop.GetValue(second);
 
+                var firstIsNull = firstProp == null;
+                var secondIsNull = secondProp == null;
+
+
+                //В ТЗ не указано, что делать, если один или оба объекта null
+                if (firstIsNull && secondIsNull == false)
+                {
+
+                }
+                else if (firstIsNull == false && secondIsNull)
+                {
+
+                }
+                else if (firstIsNull && secondIsNull)
+                {
+                    return new Difference[0];
+                }
+
                 var difference = GetDifference(firstProp, secondProp, prop.Name).ToArray();
 
-                if (difference != null)
+                if (difference != null && difference.Count() != 0)
                 {
                     differences.Concat(difference);
                 }
@@ -62,12 +80,16 @@ namespace TestJobForSAUT
         {
             if (string.IsNullOrEmpty(propertyName))
                 throw new ArgumentNullException(nameof(propertyName));
+            if (firstPropValue == null)
+                throw new ArgumentNullException(nameof(firstPropValue));
+            if (secondPropValue == null)
+                throw new ArgumentNullException(nameof(secondPropValue));
 
             var type = firstPropValue.GetType();
 
-            if (correctTypes.Contains(type))
+            if (simpleTypes.Contains(type))
             {
-                //Тут могут возникнуть проблемы со сравнением double
+                //В ТЗ не указано, как сравнивать double
                 if (firstPropValue.Equals(secondPropValue) == false)
                 {
                     return new Difference[] { new Difference(propertyName, firstPropValue.ToString(), secondPropValue.ToString()) };
@@ -91,7 +113,7 @@ namespace TestJobForSAUT
 
         private bool CheckProp(PropertyInfo p)
         {
-            if (correctTypes.Contains(p.PropertyType))
+            if (simpleTypes.Contains(p.PropertyType))
             {
                 return true;
             }
