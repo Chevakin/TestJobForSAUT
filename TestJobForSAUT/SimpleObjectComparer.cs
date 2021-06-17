@@ -47,24 +47,10 @@ namespace TestJobForSAUT
                 var firstProp = prop.GetValue(first);
                 var secondProp = prop.GetValue(second);
 
-                var firstIsNull = firstProp == null;
-                var secondIsNull = secondProp == null;
-
-
-                //В ТЗ не указано, что делать, если один или оба объекта null
-                if (firstIsNull && secondIsNull == false)
-                {
-
-                }
-                else if (firstIsNull == false && secondIsNull)
-                {
-
-                }
-                else if (firstIsNull && secondIsNull)
-                {
-                    return new Difference[0];
-                }
-
+                //В ТЗ не указано, что делать, если как минимум одно из значений свойств null
+                if (firstProp == null || secondProp == null)
+                    throw new Exception("Значение как минимум одного из свойств null");
+               
                 var difference = GetDifference(firstProp, secondProp, prop.Name).ToArray();
 
                 if (difference != null && difference.Count() != 0)
