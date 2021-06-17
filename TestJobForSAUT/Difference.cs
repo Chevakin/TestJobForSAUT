@@ -30,5 +30,24 @@ namespace TestJobForSAUT
 
             path.Insert(0, $"{prefix}.");
         }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Difference);
+        }
+
+        public bool Equals(Difference diff)
+        {
+            return diff != null &&
+                path == diff.path &&
+                First == diff.First &&
+                Second == diff.Second;
+                               
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Path, First, Second);
+        }
     }
 }

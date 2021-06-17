@@ -55,7 +55,7 @@ namespace TestJobForSAUT
 
                 if (difference != null && difference.Count() != 0)
                 {
-                    differences.Concat(difference);
+                    differences = differences.Concat(difference).ToArray();
                 }
             }
 
@@ -80,6 +80,8 @@ namespace TestJobForSAUT
                 {
                     return new Difference[] { new Difference(propertyName, firstPropValue.ToString(), secondPropValue.ToString()) };
                 }
+
+                return new Difference[0];
             }
 
             var differences = GetDifference(firstPropValue, secondPropValue, GetTypeProps(type)).ToArray();
