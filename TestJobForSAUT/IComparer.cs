@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TestJobForSAUT
+namespace TestJobForSAUT.Comparer
 {
     public interface IComparer
     {

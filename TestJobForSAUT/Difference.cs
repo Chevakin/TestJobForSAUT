@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace TestJobForSAUT
+namespace TestJobForSAUT.Comparer
 {
     public class Difference
     {
@@ -19,8 +19,8 @@ namespace TestJobForSAUT
                 throw new ArgumentNullException(nameof(path));
 
             this.path = new StringBuilder(path);
-            this.First = first;
-            this.Second = second;
+            First = first;
+            Second = second;
         }
 
         public void AddPrefixToPath(string prefix)
@@ -39,10 +39,10 @@ namespace TestJobForSAUT
         public bool Equals(Difference diff)
         {
             return diff != null &&
-                path == diff.path &&
+                Path == diff.Path &&
                 First == diff.First &&
                 Second == diff.Second;
-                               
+
         }
 
         public override int GetHashCode()

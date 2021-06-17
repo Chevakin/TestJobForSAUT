@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace TestJobForSAUT
+namespace TestJobForSAUT.Comparer
 {
     public class SimpleObjectComparer : IComparer
     {
@@ -50,7 +50,7 @@ namespace TestJobForSAUT
                 //В ТЗ не указано, что делать, если как минимум одно из значений свойств null
                 if (firstProp == null || secondProp == null)
                     throw new Exception("Значение как минимум одного из свойств null");
-               
+
                 var difference = GetDifference(firstProp, secondProp, prop.Name).ToArray();
 
                 if (difference != null && difference.Count() != 0)
@@ -86,7 +86,7 @@ namespace TestJobForSAUT
 
             var differences = GetDifference(firstPropValue, secondPropValue, GetTypeProps(type)).ToArray();
 
-            foreach(var difference in differences)
+            foreach (var difference in differences)
             {
                 difference.AddPrefixToPath(propertyName);
             }
